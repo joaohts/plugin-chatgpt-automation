@@ -20,7 +20,7 @@
 
         controlPanel.innerHTML = `
       <div id="controlPanel" style="position: fixed; top: 20px; right: 20px; z-index: 9999; background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 10px; color: #333; cursor: move; resize: both; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <button id="toggleHideBar" style="background-color: #FFC107; border: none; color: white; padding: 5px 10px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; margin: 4px 2px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s;">Hid</button>
+        <button id="toggleHideBar" style="background-color: #FFC107; border: none; color: white; padding: 5px 10px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; margin: 4px 2px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s;">Hide</button>
         <div id="panelContent">
           <button id="startAutoSubmit" style="background-color: #4CAF50; border: none; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s;">Start Auto Submit</button>
           <div id="questionWindow" style="width: 100%; height: 100px; background-color: rgba(255, 255, 255, 0.95); border: 1px solid #ddd; margin-top: 20px; padding: 10px; overflow-y: auto;">
