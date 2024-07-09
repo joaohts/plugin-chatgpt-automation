@@ -5,6 +5,7 @@
 // @description  Automatically submit questions in a queue to ChatGPT (2.0) 2023/11
 // @author       xihajun
 // @match        https://chat.openai.com/*
+// @match        https://chatgpt.com/*
 // @grant        none
 // ==/UserScript==
 (function() {
@@ -120,16 +121,16 @@
             // Use a short delay to allow any JavaScript that reacts to the input event to run
             setTimeout(() => {
                 // Attempt to find the submit button using the 'data-testid' attribute
-                let submitButton = document.querySelector('button[data-testid="send-button"]');
+                let submitButton = document.querySelector('button[data-testid="fruitjuice-send-button"]');
 
                 // If the submit button is found, click it
                 if (submitButton) {
                     submitButton.click();
-                    waitForResponse();
+                    setTimeout(() => {waitForResponse()}, 1000);
                 } else {
                     console.error('Submit button not found. Please check the button selector.');
                 }
-            }, 10000); // Adjust the delay as needed
+            }, 1000); // Adjust the delay as needed
         } else {
             console.error('Textarea not found.');
         }
@@ -145,33 +146,39 @@
         }
     }
 
-    function waitForResponse() {
-        isWaitingForResponse = true;
+   function waitForResponse() {
+    isWaitingForResponse = true;
 
-        const observer = new MutationObserver((mutationsList) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    // Check for the absence of the "Stop generating" button
-                    const stopGeneratingButton = document.querySelector('button[aria-label="Stop generating"]');
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                // Check for the absence of the "Stop generating" button
+                const stopGeneratingButton = document.querySelector('button[data-testid="fruitjuice-stop-button"]');
 
-                    if (!stopGeneratingButton) {
-                        observer.disconnect();
-                        isWaitingForResponse = false;
-                        setTimeout(() => {
-                            autoSubmitNextQuestion(); // Add a slight delay before submitting the next question
-                        }, 1000); // Adjust the delay as needed
-                        break;
-                    }
+                if (!stopGeneratingButton) {
+                    observer.disconnect();
+                    isWaitingForResponse = false;
+                    setTimeout(() => {
+                        autoSubmitNextQuestion(); // Add a slight delay before submitting the next question
+                    }, 1000); // Adjust the delay as needed
+                    break;
                 }
             }
-        });
+        }
+    });
 
-        const config = {
-            childList: true,
-            subtree: true
-        };
+    const config = {
+        childList: true,
+        subtree: true
+    };
+
+    // Check if the "fruitjuice-stop-button" is present initially before starting the observer
+    if (document.querySelector('button[data-testid="fruitjuice-stop-button"]')) {
         observer.observe(document.body, config);
+    } else {
+        isWaitingForResponse = false;
     }
+}
 
     function addQuestionToQueue(question) {
         questionList.push(question);
