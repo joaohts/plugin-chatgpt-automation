@@ -24,7 +24,7 @@
         <div id="panelContent">
           <button id="startAutoSubmit" style="background-color: #4CAF50; border: none; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s;">Start Auto Submit</button>
           <div id="questionWindow" style="width: 100%; height: 100px; background-color: rgba(255, 255, 255, 0.95); border: 1px solid #ddd; margin-top: 20px; padding: 10px; overflow-y: auto;">
-            <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 18px; font-weight: bold;">Questions</h4>
+            <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 18px; font-weight: bold;">Question</h4>
             <ul id="questionList" style="list-style-type: none; margin: 0; padding: 0;"></ul>
           </div>
         </div>
@@ -121,7 +121,7 @@
             // Use a short delay to allow any JavaScript that reacts to the input event to run
             setTimeout(() => {
                 // Attempt to find the submit button using the 'data-testid' attribute
-                let submitButton = document.querySelector('button[data-testid="fruitjuice-send-button"]');
+                let submitButton = document.querySelector('button[data-testid="send-button"]');
 
                 // If the submit button is found, click it
                 if (submitButton) {
@@ -138,9 +138,11 @@
 
     function autoSubmitNextQuestion() {
         if (questionList.length > 0) {
-            const question = questionList.shift();
-            updateQuestionListUI();
+
+            const question = questionList[0];
+
             submitQuestion(question);
+            updateQuestionListUI();
         } else {
             console.log('Question list is empty.');
         }
@@ -153,9 +155,9 @@
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList') {
                 // Check for the absence of the "Stop generating" button
-                const stopGeneratingButton = document.querySelector('button[data-testid="fruitjuice-stop-button"]');
+                const stopGeneratingButton = document.querySelector('button[data-testid="stop-button"]');
 
-                if (!stopGeneratingButton) {
+                if (!stopGeneratingButton && isAutoSubmitting) {
                     observer.disconnect();
                     isWaitingForResponse = false;
                     setTimeout(() => {
@@ -173,7 +175,7 @@
     };
 
     // Check if the "fruitjuice-stop-button" is present initially before starting the observer
-    if (document.querySelector('button[data-testid="fruitjuice-stop-button"]')) {
+    if (document.querySelector('button[data-testid="stop-button"]')) {
         observer.observe(document.body, config);
     } else {
         isWaitingForResponse = false;
